@@ -128,3 +128,27 @@
 
 // Appends Coordinates <div> to Weather <div>
 // weatherCoord.append(coordDiv);
+
+// // Displays Coordinate ('coord') Data in HTML >>
+// const coordCard = $("<div>").addClass("card").attr("id", "coord-id");
+// const coordLongHeader = $("<h5>").text("Location Coordinate - Longitude:");
+// const coordLongData = $("<p>")
+//   .addClass("card-text")
+//   .text(data["coord"]["lon"])
+//   .text(data.coord.lon);
+// const coordLatHeader = $("<h5>").text("Location Coordinate - Latitude:");
+// const coordLatData = $("<p>")
+//   .addClass("card-text")
+//   .text(data["coord"]["lon"])
+//   .text(data.coord.lat);
+
+// // Appends Coordinate Data to Coordinate Card (HTML)
+// coordCard.append(
+//   coordLongHeader,
+//   coordLongData,
+//   coordLatHeader,
+//   coordLatData
+// );
+// // Appends Coordinate Card to Forecast Card (HTML)
+// weatherOneDay.append(coordCard);
+// // << Displays Coordinate ('coord') Data in HTML

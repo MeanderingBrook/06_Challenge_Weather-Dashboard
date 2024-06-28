@@ -89,3 +89,7 @@ main {
 /* .column {
   float: left;
 } */
+
+.forecast {
+  display: flex;
+}
