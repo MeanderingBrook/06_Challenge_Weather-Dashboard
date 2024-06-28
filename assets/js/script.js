@@ -196,53 +196,41 @@ function displayWeather(data) {
   //////////////////////////////////////////////////
   // display forecast with an offset of
   for (let i = 5; i < data.list.length; i = i + 8) {
-    // Displays Next Day (Day 1) Forecast >>
-    // Creates Day 1 Forecast Card to which to Append Day 1 Weather Data
-    const dayOneDiv = $("<div>");
+    // forecast container
+    const forecastContainer = $("<div>");
 
-    // Displays Day 1 Date in HTML >>
-    // Formats Search Date (Unix Timestamp) (Data is returned in three (3) hour increments)
-    const dateDay1 = new Date(data.list[i].dt * 1000);
-    // console.log(dateDay1.toDateString());
+    // forecast date
+    const forecastDateHeader = $("<h5>");
+    const forecastCardDate = new Date(data.list[i].dt * 1000);
+    forecastDateHeader.text(forecastCardDate.toDateString());
 
-    // Day 1 Date
-    const dayOneDate = $("<h5>");
-    dayOneDate.text(dateDay1.toDateString());
+    // forecast icon
+    const forecastIconCode = data.list[i].weather[0].icon;
+    const forecastIconURL = `https://openweathermap.org/img/wn/${forecastIconCode}.png`;
 
-    // Weather Icon >>
-    // Returns Weather Icon Code (e.g., 02d)
-    const iconCodeDay1 = data.list[i].weather[0].icon;
-
-    // Assigns OpenWeather API to return Weather Icon Image
-    // Icon Image: Standard (1x)
-    const iconURLDay1 =
-      "https://openweathermap.org/img/wn/" + iconCodeDay1 + ".png";
-    // Icon Image: Large (2x)
-    // const iconURLDay1 = "https://openweathermap.org/img/wn/" + iconCodeDay1 + "@2x.png";
-
-    // Creates Weather Icon Image Container <div>
-    const weatherIconDivDay1 = $("<div>").attr("id", "icon-day1-id");
+    // forecast icon container
+    const forecastIconDiv = $("<div>").attr("id", "icon-day1-id");
 
     // Assigns OpenWeather Icon API to <img> Tag
-    const weatherImgDay1 = $("<img>").attr("src", iconURLDay1);
+    const forecastImg = $("<img>").attr("src", forecastIconURL);
 
     // Appends Weather Icon Image to Weather Icon Container
-    weatherIconDivDay1.append(weatherImgDay1);
+    forecastIconDiv.append(forecastImg);
     // << Weather Icon
 
-    dayOneDiv.append(dayOneDate, weatherIconDivDay1);
+    forecastContainer.append(forecastDateHeader, forecastIconDiv);
     // << Displays Current City * Search Date * Weather Icon in HTML
 
     // Displays Temperature Data in HTML >>
-    const tempCardDay1 = $("<div>")
+    const forecastTempCard = $("<div>")
       .addClass("card flex-row")
       .attr("id", "temp-day1-id");
-    const tempHeaderDay1 = $("<h4>").text("Temperature");
+    const forecastTempHeader = $("<h4>").text("Temperature");
     // Assigns Temperature (Farenheit) and adds Degree Symbol
-    const tempDataDay1 = $("<p>").text(data.list[i].main.temp + "\u00B0F");
+    const forecastTemp = $("<p>").text(data.list[i].main.temp + "\u00B0F");
 
-    tempCardDay1.append(tempHeaderDay1, tempDataDay1);
-    dayOneDiv.append(tempCardDay1);
+    forecastTempCard.append(forecastTempHeader, forecastTemp);
+    forecastContainer.append(forecastTempCard);
     // << Displays Temperature Data in HTML
 
     // Displays Wind Data in HTML >>
@@ -254,7 +242,7 @@ function displayWeather(data) {
     const windDataDay1 = $("<p>").text(data.list[i].wind.speed + " MPH");
 
     windCardDay1.append(windHeaderDay1, windDataDay1);
-    dayOneDiv.append(windCardDay1);
+    forecastContainer.append(windCardDay1);
     // << Displays Wind Data in HTML
 
     // Displays Humidity Data in HTML >>
@@ -266,9 +254,9 @@ function displayWeather(data) {
     const humidityDataDay1 = $("<p>").text(data.list[i].main.humidity + "%");
 
     humidityCardDay1.append(humidityHeaderDay1, humidityDataDay1);
-    dayOneDiv.append(humidityCardDay1);
+    forecastContainer.append(humidityCardDay1);
 
-    weatherFiveDay.append(dayOneDiv);
+    weatherFiveDay.append(forecastContainer);
   }
 
   //
