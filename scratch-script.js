@@ -83,3 +83,48 @@
 //     return null;
 //   }
 // }
+
+// JS CODE FROM displayWeather(data) INSTEAD OF JQUERY
+// // OpenWeather 'data' Nodes >>
+// // Stores OpenWeather 'data' - Coordinate: Longitude
+// let coordLongNode = data.coord.lon;
+
+// // Stores OpenWeather 'data' - Coordinate: Latitude
+// let coordLatNode = data.coord.lat;
+// // << OpenWeather 'data' Nodes
+
+// Current City Display >>
+// Defines Target HTML Element to which to Append Current City
+// const currentCity = $("#current-city");
+
+// // Current City 'data' Node
+// let curCityNode = data.name;
+
+// // Current City <p>
+// const curCityPara = document.createElement("h2");
+// // curCityPara.textContent = curCityNode;
+// curCityPara.textContent = curCityNode;
+// currentCity.append(curCityPara);
+// // << Current City Display
+
+// // Display Location Coordinate ('coord') Data in HTML >>
+// // Coordinate <div>
+// const coordDiv = document.createElement("div");
+// coordDiv.classList.add("task-card");
+// coordDiv.setAttribute("id", "coordLon");
+
+// // Coordinate - Longitude <p>
+// const coordLongPara = document.createElement("p");
+// coordLongPara.textContent = coordLongNode;
+
+// // Coordinate - Latitude <p>
+// const coordLatPara = document.createElement("p");
+// coordLatPara.textContent = coordLatNode;
+
+// // Appends Coordinates (Longitude, Latitude) to Coordinate <div>
+// coordDiv.append(coordLongPara);
+// coordDiv.append(coordLatPara);
+// // << Display Coordinate ('coord') Data in HTML
+
+// Appends Coordinates <div> to Weather <div>
+// weatherCoord.append(coordDiv);
