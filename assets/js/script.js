@@ -31,7 +31,7 @@ function cityLoc() {
   // console.log(newSearch);
 
   // Defines User-selected City Location for Weather Request >>
-  let inputCity = "Chicago";
+  let inputCity = "Des Moines";
   // let inputState = "MA";
   let inputCntryCode = "US";
 
@@ -56,8 +56,8 @@ function cityLoc() {
     for (let i in searchArray) {
       // Iterates through searchArray
       if (searchArray[i].cityLoc === inputCity) {
-        console.log("City Value Already Exists");
-        console.log(searchArray);
+        // console.log("City Value Already Exists");
+        // console.log(searchArray);
         return null;
       }
     }
@@ -91,8 +91,11 @@ async function getWeather() {
   const apiKey = "91512c0479417b46b9d5f9b5e91a4f51";
   // console.log(apiKey);
 
+  // Defines 5-Day Query URL to OpenWeather, including Geo-Located User-selected City (Longitude, Latitude) and API Key
+
   // Defines Query URL to OpenWeather, including User-selected Location and API Key
-  const weatherURL = `https://api.openweathermap.org/data/2.5/weather?q=${inputLoc}&appid=${apiKey}`;
+  // Note: Imperial Units (e.g., Farenheit Temperature)
+  const weatherURL = `https://api.openweathermap.org/data/2.5/weather?q=${inputLoc}&appid=${apiKey}&units=imperial`;
   // console.log(queryURL);
 
   const response = await fetch(weatherURL);
@@ -104,71 +107,103 @@ async function getWeather() {
 
 // Displays OpenWeather 'data' through dynamically created HTML Elements
 function displayWeather(data) {
-  // Defines Target HTML Element to which to Append Fetch-returned Data
-  // let targetHTMLId = document.getElementById("forecast");
-  const weatherCoord = $("#one-day-forecast");
-
-  // OpenWeather 'data' Nodes >>
-  // Stores OpenWeather 'data' - Coordinate: Longitude
-  let coordLongNode = data.coord.lon;
-
-  // Stores OpenWeather 'data' - Coordinate: Latitude
-  let coordLatNode = data.coord.lat;
-  // << OpenWeather 'data' Nodes
-
-  // Current City Display >>
   // Defines Target HTML Element to which to Append Current City
   const currentCity = $("#current-city");
 
-  // Current City 'data' Node
-  let curCityNode = data.name;
+  // Defines Target HTML Element to which to Append One-Day Forecast
+  const weatherOneDay = $("#one-day-forecast");
 
-  // // Current City <p>
-  // const curCityPara = document.createElement("h2");
-  // // curCityPara.textContent = curCityNode;
-  // curCityPara.textContent = curCityNode;
-  // currentCity.append(curCityPara);
-  // // << Current City Display
+  // Displays Current City * Search Date * Weather Icon in HTML >>
+  // Formats Search Date (Unix Timestamp)
+  const searchDate = new Date(data.dt * 1000);
+  // console.log(searchDate.toDateString());
 
-  // // Display Location Coordinate ('coord') Data in HTML >>
-  // // Coordinate <div>
-  // const coordDiv = document.createElement("div");
-  // coordDiv.classList.add("task-card");
-  // coordDiv.setAttribute("id", "coordLon");
+  // Current City
+  const cityName = $("<h2>");
+  cityName.text(data.name);
 
-  // // Coordinate - Longitude <p>
-  // const coordLongPara = document.createElement("p");
-  // coordLongPara.textContent = coordLongNode;
+  // Current Date
+  const currDate = $("<h3>");
+  currDate.text("(" + searchDate.toDateString() + ")");
 
-  // // Coordinate - Latitude <p>
-  // const coordLatPara = document.createElement("p");
-  // coordLatPara.textContent = coordLatNode;
+  // Weather Icon >>
+  // Returns Weather Icon Code (e.g., 02d)
+  const iconCode = data.weather[0].icon;
 
-  // // Appends Coordinates (Longitude, Latitude) to Coordinate <div>
-  // coordDiv.append(coordLongPara);
-  // coordDiv.append(coordLatPara);
-  // // << Display Coordinate ('coord') Data in HTML
+  // Defines OpenWeather API to return Weather Icon Image
+  // Icon Image: Standard (1x)
+  // const iconURL = "https://openweathermap.org/img/wn/" + iconCode + ".png";
+  // Icon Image: Large (2x)
+  const iconURL = "https://openweathermap.org/img/wn/" + iconCode + "@2x.png";
 
-  // Appends Coordinates <div> to Weather <div>
-  // weatherCoord.append(coordDiv);
+  // Creates Weather Icon Image Container <div>
+  const weatherIconDiv = $("<div>").attr("id", "icon-id");
 
-  // Displays Current City in HTML
-  const currCity = $("<h2>");
-  currCity.text(data.name);
-  currentCity.append(currCity);
+  // Assigns OpenWeather Icon API to <img> Tag
+  const weatherImg = $("<img>").attr("src", iconURL);
 
-  // Displays Coordinate ('coord') Data in HTML
-  const coordCard = $("<div>").addClass("card").attr("id", "coord-id");
-  const coordLongHeader = $("<h5>").text("Location Coordinate - Longitude:");
-  const coordLongDesc = $("<p>")
-    .addClass("card-text")
-    .text(data["coord"]["lon"])
-    .text(coordLongNode);
+  // Appends Weather Icon Image to Weather Icon Container
+  weatherIconDiv.append(weatherImg);
+  // << Weather Icon
 
-  coordCard.append(coordLongHeader, coordLongDesc);
-  weatherCoord.append(coordCard);
+  currentCity.append(cityName, currDate, weatherIconDiv);
+  // << Displays Current City * Search Date * Weather Icon in HTML
+
+  // Displays Temperature Data in HTML >>
+  const tempCard = $("<div>").addClass("card flex-row").attr("id", "temp-id");
+  const tempHeader = $("<h4>").text("Temperature");
+  const tempData = $("<p>").text(data.main.temp + "\u00B0F");
+
+  tempCard.append(tempHeader, tempData);
+  weatherOneDay.append(tempCard);
+  // << Displays Temperature Data in HTML
+
+  // Displays Wind Data in HTML >>
+  const windCard = $("<div>").addClass("card flex-row").attr("id", "wind-id");
+  const windHeader = $("<h4>").text("Wind Speed");
+  const windData = $("<p>").text(data.wind.speed + " MPH");
+
+  windCard.append(windHeader, windData);
+  weatherOneDay.append(windCard);
+  // << Displays Wind Data in HTML
+
+  // Displays Humidity Data in HTML >>
+  const humidityCard = $("<div>")
+    .addClass("card flex-row")
+    .attr("id", "humidity-id");
+  const humidityHeader = $("<h4>").text("Humidity");
+  const humidityData = $("<p>").text(data.main.humidity + "%");
+
+  humidityCard.append(humidityHeader, humidityData);
+  weatherOneDay.append(humidityCard);
+  // << Displays Humidity Data in HTML
+
+  // // Displays Coordinate ('coord') Data in HTML >>
+  // const coordCard = $("<div>").addClass("card").attr("id", "coord-id");
+  // const coordLongHeader = $("<h5>").text("Location Coordinate - Longitude:");
+  // const coordLongData = $("<p>")
+  //   .addClass("card-text")
+  //   .text(data["coord"]["lon"])
+  //   .text(data.coord.lon);
+  // const coordLatHeader = $("<h5>").text("Location Coordinate - Latitude:");
+  // const coordLatData = $("<p>")
+  //   .addClass("card-text")
+  //   .text(data["coord"]["lon"])
+  //   .text(data.coord.lat);
+
+  // // Appends Coordinate Data to Coordinate Card (HTML)
+  // coordCard.append(
+  //   coordLongHeader,
+  //   coordLongData,
+  //   coordLatHeader,
+  //   coordLatData
+  // );
+  // // Appends Coordinate Card to Forecast Card (HTML)
+  // weatherOneDay.append(coordCard);
+  // // << Displays Coordinate ('coord') Data in HTML
 }
 
+// Initiates Retrieval >>
 // Returns User Location
 cityLoc();
 
@@ -177,7 +212,9 @@ getWeather().then(displayWeather);
 
 // Retrieves OpenWeather 'data' and Outputs to Console
 // getWeather().then(consoleWeather);
+// << Initiates Retrieval
 
+//
 // for (let i = 0; i < docArray.length; i++) {
 //   let rtrnItem = document.createElement("li");
 //   rtrnItem.textContent = docArray[i].description; // description is place-holder JSON data element, CHANGE
