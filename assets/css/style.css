@@ -93,3 +93,10 @@ main {
 .forecast {
   display: flex;
 }
+
+
+/* Search History */
+
+.search-item {
+  border: 1px solid blue;
+}

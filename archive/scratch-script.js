@@ -1,6 +1,6 @@
-// Processes FETCH Request to OpenWeather Query URL
-// fetch(queryURL)
 //   .then(function (response) {
+// fetch(queryURL)
+// Processes FETCH Request to OpenWeather Query URL
 //     if (response.status !== 200) {
 //       console.log(response.status);
 //     } else {
@@ -152,3 +152,13 @@
 // // Appends Coordinate Card to Forecast Card (HTML)
 // weatherOneDay.append(coordCard);
 // // << Displays Coordinate ('coord') Data in HTML
+
+// NOT USED !!!
+// Defines User Search Parameters based on ZIP Code
+// async function zipLoc() {
+//   // Assigns User-selected ZIP Code Location for Weather Request
+//   let inputZIP = "02108";
+//   // console.log(inputZIP);
+
+//   return inputZIP;
+// }
