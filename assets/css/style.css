@@ -13,14 +13,10 @@ header {
   position: sticky;
   height: 10vh;
   width: 100vw;
-  /* display: flex; */
-  /* flex-direction: row; */
-  /* justify-content: space-between; */
   align-items: center;
   padding-top: 1vh;
   text-align: center;
   color: rgba(0,0,128,1.0);
-  /* background-color: white; */
   background: rgb(255,255,255);
   background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,248,0,0.75) 0%, rgba(142,236,255,0.75) 25%, rgba(0,212,255,1) 50%, rgba(0,107,129,1) 100%);
 }
@@ -29,74 +25,168 @@ header h1 {
   margin-top: 1vh;
 }
 
-/* #headercontent {
-  position: absolute;
-  bottom: 0;
-  left: 35%;
-} */
 
-/* Custom Page Container */
+/* Page Container */
 
 .page-container {
   display: flex;
   height: 90vh;
 }
 
-/* ASIDE */
-
-aside {
-  float: left;
-  min-width: 25vw;
-  /* max-width: 25vw; */
-  background-color: white;
-  padding-top: 1vh;
-  padding-bottom: 1vh;
-  padding-left: 1vw;
-  padding-right: 1vw;
-}
-
-.search {
-  /* placeholder */
-}
 
 /* MAIN */
 
 main {
   float: left;
   min-width: 75vw;
-  /* margin-left: 25vw;
-  max-width: 75vw; */
   background-color: aliceblue;
   padding-top: 1vh;
   padding-left: 1vw;
   padding-right: 1vw;
+  color: rgba(0,0,64,1.0);
 }
 
+/* Current (Day 0) Weather */
+
 .current-city {
+  margin-top: 0vh;
+  margin-bottom: 2vh;
   display: flex;
   flex-direction: row;
+}
+
+.current-city h2 {
+  padding-top: 2vh;
+  margin-right: 1vw;
+}
+
+.icon-container {
+  margin-top: 1vh;
+  margin-left: 2vw;
+  background-color: white;
+  border-radius: 10px;
 }
 
 .flex-row {
   display: flex;
 }
 
-.flex-row h4 {
+/* THINK CAN DELETE !!! */
+/* .flex-row h5 {
+  margin-right: 1vw;
+} */
+
+.today-card {
+  margin-top: 0.50vh;
+  padding-top: 1vh;
+  padding-left: 1vw;
+  max-width: 60%;
+  border-radius: 5px;
+  background-color: rgb(255, 255, 255,0.90);
+}
+
+.today-card h4 {
   margin-right: 1vw;
 }
 
-/* Defines Location Search and Forecast Containers */
-/* .column {
-  float: left;
-} */
+.today-card p {
+  padding-top: 0.25vh;
+  font-size: large;
+}
 
+/* Five (5) Day Weather Forecast */
+
+.forecast-container {
+  margin-top: 5vh;
+}
+
+.forecast-container h3 {
+  margin-top: 1vh;
+  margin-bottom: 3vh;
+}
+
+/* Note: Section holding individual Five (5) Day Forecast cards */
 .forecast {
   display: flex;
 }
 
+.forecast-card {
+  margin-left: 0.250vw;
+  margin-right: 0.250vw;
+  padding-top: 1.0vh;
+  padding-bottom: 1.0vh;
+  padding-left: 0.5vw;
+  padding-right: 0.5vw;
+  border-radius: 5px;
+  background-color: rgba(0, 91, 110, 0.75);
+  color: white;
+}
+
+.forecast-icon {
+  /* Placeholder */
+}
+
+
+/* ASIDE */
+
+aside {
+  float: left;
+  min-width: 25vw;
+  background-color: white;
+  padding-bottom: 1vh;
+  padding-left: 1vw;
+  padding-right: 1vw;
+  color: rgba(0,107,129,1);
+}
+
+/* Search Input */
+
+.search-input {
+  margin-top: 3vh;
+  margin-bottom: 3.00vh;
+  padding-bottom: 3.00vh;
+  border-bottom: 5px solid rgba(0,107,129,0.50);
+}
+
+.search-input h3 {
+  margin-top: 1vh;
+}
+
+.city-input {
+  min-width: 95%;
+  margin-top: 1vh;
+  margin-bottom: 2vh;
+  padding-left: 1vw;
+  border-radius: 5px;
+  height: 2lh
+}
+
+.search-btn {
+  margin-bottom: 1vh;
+  min-width: 95%;
+  border-radius: 10px;
+  background-color: aliceblue;
+  height: 1.5lh;
+  box-shadow: 2px 4px rgba(0,107,129,1);
+}
 
 /* Search History */
 
+.search-history-container {
+  /* Placeholder */
+}
+
+.searchCard {
+  /* Placeholder */
+}
+
 .search-item {
-  border: 1px solid blue;
+  width: 95%;
+  margin-top: 1.0vh;
+  margin-bottom: 1.0vh;
+  border: 1px solid rgba(0,107,129,1);
+  border-radius: 10px;
+  background-color: aliceblue;
+  height: 1.5lh;
+  box-shadow: 2px 5px rgba(0,107,129,1);
 }
