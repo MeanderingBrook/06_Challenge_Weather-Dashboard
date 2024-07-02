@@ -107,7 +107,7 @@ JavaScript-created Dashboard presentation of Weather serach entries as &lt;ul&gt
 
 ## GitHub Pages Location
 
-
+https://meanderingbrook.github.io/06_Challenge_Weather-Dashboard/
 
 
 ## Application Screenshots
