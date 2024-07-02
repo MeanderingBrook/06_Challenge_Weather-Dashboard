@@ -162,3 +162,16 @@
 
 //   return inputZIP;
 // }
+
+// Initiates Weather Data Retrieval >>
+// NEW !!! COMMENTED OUT
+// Returns User Location
+// cityLoc();
+
+// Retrieves OpenWeather 'data' and Displays to Page ('index.html')
+// NEW !!! COMMENTED OUT
+// getWeather().then(displayWeather);
+
+// Retrieves OpenWeather 'data' and Outputs to Console
+// getWeather().then(consoleWeather);
+// << Initiates Weather Data Retrieval

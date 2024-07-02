@@ -23,21 +23,20 @@
     <!-- Location Search Sidebar -->
     <aside>
       <!-- User Input Container -->
-      <section class="search">
+      <section class="search-input">
         <h3>Search for a City:</h3>
-        <label for="city">City</label>
         <input type="text"
                 name="city"
+                class="city-input"
                 id="city"
                 required
                 placeholder="Enter a City Name">
+         <br>
         <!-- Location Search Execution Button -->
-         <!-- NEW !!! -->
-        <!-- <button type="button" onclick="getWeather().then(displayWeather)">Search</button> -->
-        <button type="button" id="searchbtn" onclick="cityLoc()">Search</button>
+        <button type="button" class="search-btn" id="searchbtn" onclick="cityLoc()">Search</button>
       </section>
       <!-- Search History of Prior Locations -->
-      <section>
+      <section class="search-history-container">
         <h4>Search History:</h4>
         <section id="search-history">
 
@@ -56,9 +55,9 @@
       <section id="one-day-forecast">
       </section>
       <!-- Weather Forecast of Currently-Selected Location -->
-      <section>
+      <section class="forecast-container">
         <h3>
-          5-Day Forecast
+          5-Day Forecast:
         </h3>
         <section class="forecast" id="five-day-forecast">
         </section>
