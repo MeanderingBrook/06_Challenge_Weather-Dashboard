@@ -1,5 +1,3 @@
-// REFERENCE: https://github.com/siennameow/Weather-Dashboard
-
 // import { API_KEY } from "../../env-local.js";
 // const API_KEY = require("../../env-local.js");
 
@@ -9,80 +7,79 @@ const inputCity = document.getElementById("city");
 const inputCntryCode = "US";
 // const inputZIP = document.getElementById("zipcode");
 
-// Loads existing Location Searches from Local Storage to permanent Array (searchArray), else: empty Array
-let searchArray = localStorage.getItem("locSearchs")
-  ? JSON.parse(localStorage.getItem("locSearchs"))
-  : [];
-// console.log(searchArray);
+// Returns User Search History from Local Storage for use subsequent Functions
+function refreshSearchHistory() {
+  // Loads existing Location Searches from Local Storage to permanent Array (searchHistory), else: empty Array
+  let searchHistory = localStorage.getItem("locSearchs")
+    ? JSON.parse(localStorage.getItem("locSearchs"))
+    : [];
+  // console.log(searchHistory);
 
-// Defines User Search Parameters based on ZIP Code
-async function zipLoc() {
-  // Assigns User-selected ZIP Code Location for Weather Request
-  let inputZIP = "02108";
-  // console.log(inputZIP);
-
-  return inputZIP;
+  // Returns current Search History for use by other Functions
+  return searchHistory;
 }
+
+// NEW !!! COMMENTED OUT
+// // Loads existing Location Searches from Local Storage to permanent Array (searchHistory), else: empty Array
+// let searchHistory = localStorage.getItem("locSearchs")
+//   ? JSON.parse(localStorage.getItem("locSearchs"))
+//   : [];
+// // console.log(searchHistory);
 
 // Defines User Search Parameters based on City
 function cityLoc() {
+  // Calls Search History and assigns Local Storage Object to local Variable
+  searchHistory = refreshSearchHistory();
+
   // Assigns Temporary Object in which to hold User Input Location prior to adding to Local Storage (locSearch)
   newSearch = {};
   // console.log(newSearch);
 
-  // Assigns User-selected City Location for Weather Request >>
-  let inputCity = "Des Moines";
+  // Assigns User-selected City Location >>
+  // let inputCity = "Des Moines";
   // let inputState = "MA";
+
+  // Hard-coded Country Value (Search only functions for U.S. Cities)
   let inputCntryCode = "US";
 
-  // WORKS WITHOUT STATE, APPARENTLY
-  // inputLoc = inputCity + "," + inputState + "," + inputCntryCode;
-  inputLoc = inputCity + "," + inputCntryCode;
-  // console.log(inputLoc);
-  // << User-selected City Location
+  newSearch.cityLoc = inputCity.value;
+  // console.log(`The new City entered is, ${newSearch.cityLoc}`);
 
-  newSearch.cityLoc = inputCity;
-  // USE THIS LATER WHEN INPUT FIELD
-  // newSearch.cityLoc = inputCity.value;
-  // console.log(newSearch.userName);
-
+  // State Location not required !!!
   // newSearch.stateLoc = inputState.value;
-  // console.log(newSearch.userName);
+  // console.log(newSearch.stateLoc);
 
   newSearch.cntryLoc = inputCntryCode;
-  // console.log(newSearch.userName);
+  // console.log(`The Country Code is, ${newSearch.cntryLoc}`);
 
+  // inputLoc = inputCity + "," + inputState + "," + inputCntryCode;
+  inputLoc = newSearch.cityLoc + "," + newSearch.cntryLoc;
+  // console.log(`The Input Location is, ${inputLoc}`);
+  // << Assigns User-selected City Location
+
+  // Determines if current City is already present in searchHistory (Boolean Value)
+  let cityPresent = searchHistory.some(function (el) {
+    return el.cityLoc === newSearch.cityLoc;
+  });
+
+  // Checks if searchHistory is empty OR if Search City is NOT present in searchHistory
   if (newSearch.cityLoc && newSearch.cntryLoc) {
-    for (let i in searchArray) {
-      // Iterates through searchArray
-      if (searchArray[i].cityLoc === inputCity) {
-        // console.log("City Value Already Exists");
-        // console.log(searchArray);
-        return null;
-      }
+    if (!Object.entries(searchHistory.length) || cityPresent === false) {
+      // Adds new Search inputs to searchHistory ONLY if searchHistory is empty, OR if current City is NOT present in searchHistory
+      searchHistory.push(newSearch);
+
+      // Adds values of searchHistory to Local Storage
+      localStorage.setItem("locSearchs", JSON.stringify(searchHistory));
+
+      // Calls OpenWeather API, then Display Function
+      getWeather().then(displayWeather);
+    } else {
+      // If Search City IS present in searchHistory, only calls OpenWeather API
+      getWeather().then(displayWeather);
     }
   } else {
-    alert("Please enter a U.S. City name.");
-    return false;
+    alert("Please enter a City name.");
   }
-
-  // Adds new Search inputs to searchArray
-  searchArray.push(newSearch);
-
-  // Displays to Console ONLY when new City is added
-  console.log(newSearch);
-  console.log(searchArray);
-
-  // Adds values of searchArray to Local Storage
-  localStorage.setItem("locSearchs", JSON.stringify(searchArray));
-
-  // Passes newSearch values to getWeather() to be sent to OpenWeather API
-  getWeather(newSearch);
-
-  // Clears Variable Values for next User Input
-  inputCity = "";
-  // inputState = "";
-  inputCntryCode = "";
 }
 
 // Calls OpenWeather API and retrieves Weather 'data' for User-selected Location
@@ -92,7 +89,7 @@ async function getWeather() {
   // console.log(apiKey);
 
   // Assigns Query URL to OpenWeather, including User-selected Location and API Key
-  // Note: Current Weather, Imperial Units (e.g., Farenheit Temperature) (weather?)
+  // Note: Current (within three (3) hour refresh window) Weather, Imperial Units (e.g., Farenheit Temperature) (weather?)
   // const weatherURL = `https://api.openweathermap.org/data/2.5/weather?q=${inputLoc}&appid=${apiKey}&units=imperial`;
 
   // Note: Five (5) Day Weather (Three (3) Hour Steps), Imperial Units (e.g., Farenheit Temperature) (forecast?)
@@ -103,14 +100,11 @@ async function getWeather() {
   const data = await response.json();
 
   console.log(data);
-  // console.log(data.city.name); // WORKS !!!
-  return data;
+  displayWeather(data);
 }
 
 // Displays OpenWeather 'data' through dynamically created HTML Elements
 function displayWeather(data) {
-  // Displays Current City, Current Date, Current (Day 0) Weather >> >>
-  //
   // Assigns Target HTML Element to which to Append Current City
   const currentCity = $("#current-city");
 
@@ -118,21 +112,33 @@ function displayWeather(data) {
   const weatherOneDay = $("#one-day-forecast");
 
   // Displays Current City * Search Date * Weather Icon in HTML >>
+  //
   // Formats Search Date (Unix Timestamp)
   const searchDate = new Date(data.list[0].dt * 1000);
   // console.log(searchDate.toDateString());
 
+  // Clears Display of prior Weather Data
+  function clearDisplay() {
+    $("#city-id").remove();
+    $("#icon-id").remove();
+    $("#date-id").remove();
+    $("#one-day-forecast").children().remove();
+    $("#five-day-forecast").children().remove();
+  }
+  clearDisplay();
+
+  // Displays Current City, Current Date, Current (Day 0) Weather >> >>
+  //
   // Current City
-  const cityName = $("<h2>");
-  cityName.text(data.city.name); // THIS WORKS !!!
+  const cityName = $("<h2>").attr("id", "city-id");
+  cityName.text(data.city.name);
 
   // Current Date
-  const currDate = $("<h3>");
+  const currDate = $("<h3>").attr("id", "date-id");
   currDate.text("(" + searchDate.toDateString() + ")");
 
   // Weather Icon >>
   // Returns Weather Icon Code (e.g., 02d)
-  // const iconCode = data.weather[0].icon; // FROM 1 DAY DATA
   const iconCode = data.list[0].weather[0].icon;
 
   // Assigns OpenWeather API to return Weather Icon Image
@@ -152,6 +158,7 @@ function displayWeather(data) {
   // << Weather Icon
 
   currentCity.append(cityName, currDate, weatherIconDiv);
+  //
   // << Displays Current City * Search Date * Weather Icon in HTML
 
   // Displays Temperature Data in HTML >>
@@ -185,19 +192,16 @@ function displayWeather(data) {
   humidityCard.append(humidityHeader, humidityData);
   weatherOneDay.append(humidityCard);
   // << Displays Humidity Data in HTML
-  //
-  // << << Displays Current City, Current Date, Current (Day 0) Weather
 
   // Displays Five (5) Day Forecast >> >>
   //
   // Assigns Target HTML Element to which to Append Five (5) Day Forecast
   const weatherFiveDay = $("#five-day-forecast");
 
-  //////////////////////////////////////////////////
   // display forecast with an offset of
-  for (let i = 5; i < data.list.length; i = i + 8) {
+  for (let i = 0; i < data.list.length; i = i + 8) {
     // forecast container
-    const forecastContainer = $("<div>");
+    const forecastContainer = $("<div>").attr("id", "forecast-id");
 
     // forecast date
     const forecastDateHeader = $("<h5>");
@@ -258,41 +262,73 @@ function displayWeather(data) {
 
     weatherFiveDay.append(forecastContainer);
   }
+  $("#city").val("");
+  displaySearchHistory();
+}
 
-  //
-  //
-  // << Displays Day 2 Forecast
+function createSearchItem(search) {
+  const searchCard = $("<div>").addClass("searchCard");
+  // const searchItem = $("<p>").text(search.cityLoc);
+  const searchItemBtn = $("<button>")
+    .addClass("search-item")
+    .text(search.cityLoc)
+    .attr("search-id", search.cityLoc);
+  searchItemBtn.on("click", cityLoc); // No Parentheses () Required !!!
 
-  // Displays Day 3 Forecast >>
-  // Displays Day 3 Date in HTML >>
-  const day3Date = new Date(data.list[23].dt * 1000);
-  // console.log(day3Date.toDateString());
+  searchCard.append(searchItemBtn);
 
-  // << Displays Day 3 Date in HTML
+  return searchCard;
+}
 
-  // Displays Day 4 Forecast >>
-  // Displays Day 4 Date in HTML >>
-  const day4Date = new Date(data.list[31].dt * 1000);
-  // console.log(day4Date.toDateString());
+// Initiates refreshed OpenWeather API call for previously-searched City
+function searchHistLoc(event) {
+  // Constant holding previously-searched City for which new Weather data will be called
+  const citySearch = $(this).attr("search-id");
+  console.log(citySearch);
 
-  // << Displays Day 4 Date in HTML
+  // Hard-coded Country Value (Search only functions for U.S. Cities)
+  let searchCntryCode = "US";
 
-  // Displays Day 5 Forecast >>
-  // Displays Day 5 Date in HTML >>
-  const day5Date = new Date(data.list[39].dt * 1000);
-  // console.log(day5Date.toDateString());
+  inputLoc = citySearch + "," + searchCntryCode;
+  console.log(inputLoc);
 
-  // << Displays Day 3 Date in HTML
+  getWeather().then(displayWeather);
+}
 
-  // << << Displays Five (5) Day Forecast
+function displaySearchHistory() {
+  // Calls Search History and assigns Local Storage Object to local Variable
+  searchHistory = refreshSearchHistory();
+
+  // Clears list of prior City Searchs (HTML)
+  const searchList = $("#search-history");
+  searchList.empty();
+
+  searchHistory.forEach((search) => {
+    searchList.append(createSearchItem(search));
+  });
+
+  // Limits displayed Search History to first five (5) Cities in Local Storage - NOT USED
+  // searchHistory.slice(0, 5).forEach((search) => {
+  //   searchList.append(createSearchItem(search));
+  // });
+
+  // Limits displayed Search History to last five (5) Cities in Local Storage - NOT USED
+  // searchHistory
+  //   .slice(1)
+  //   .slice(-5)
+  //   .forEach((search) => {
+  //     searchList.append(createSearchItem(search));
+  //   });
 }
 
 // Initiates Weather Data Retrieval >>
+// NEW !!! COMMENTED OUT
 // Returns User Location
-cityLoc();
+// cityLoc();
 
 // Retrieves OpenWeather 'data' and Displays to Page ('index.html')
-getWeather().then(displayWeather);
+// NEW !!! COMMENTED OUT
+// getWeather().then(displayWeather);
 
 // Retrieves OpenWeather 'data' and Outputs to Console
 // getWeather().then(consoleWeather);
@@ -310,20 +346,7 @@ getWeather().then(displayWeather);
 //     console.log(error);
 //   });
 
-// // FLAT MAP DOESNT WORK !!! WHY ??? !!!  DOESNT WORK ON OBJECTS IN JS
-// let res = data.flatMap((x) => Object.keys(x));
-// console.log(res);
-
-// THIS DOESNT WORK WHICH DOESNT MAKE SENSE
-// var result = resData.map(function (sub) {
-//   return sub.reduce(function (obj, pair) {
-//     obj[pair[0]] = pair[1];
-//     // return obj;
-//     console.log(obj);
-//   }, {});
-// });
-
-// Outputs OpenWeather 'data'
+// Outputs OpenWeather 'data' to Console
 function consoleWeather(data) {
   // DONT KNOW IF THIS WORKS INSIDE FUNCTION, DOES WORK OUTSIDE OF FUNCTION
   // getWeather().then((data) => {

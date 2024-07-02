@@ -32,11 +32,16 @@
                 required
                 placeholder="Enter a City Name">
         <!-- Location Search Execution Button -->
-        <button type="button" onclick="cityLoc()">Search</button>
+         <!-- NEW !!! -->
+        <!-- <button type="button" onclick="getWeather().then(displayWeather)">Search</button> -->
+        <button type="button" id="searchbtn" onclick="cityLoc()">Search</button>
       </section>
       <!-- Search History of Prior Locations -->
       <section>
         <h4>Search History:</h4>
+        <section id="search-history">
+
+        </section>
       </section>
     </aside>
     <!-- Current Location One- and Five-Day Forecasts -->
@@ -49,7 +54,6 @@
       </section>
       <!-- One-Day Forecast of Current City -->
       <section id="one-day-forecast">
-
       </section>
       <!-- Weather Forecast of Currently-Selected Location -->
       <section>
@@ -57,7 +61,6 @@
           5-Day Forecast
         </h3>
         <section class="forecast" id="five-day-forecast">
-
         </section>
       </section>
     </main>
