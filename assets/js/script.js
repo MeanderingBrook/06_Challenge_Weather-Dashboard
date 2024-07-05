@@ -1,7 +1,7 @@
-// Note to Reviewers: This code is unused and is simply the result of an experiment to duplicate React.js functionality
+// Note to Reviewers: This code is unused and is the result of an experiment to duplicate React.js functionality
 // that places sensitive information in a secure location (e.g., env-local file)
-// import { API_KEY } from "../../env-local.js";
-// const API_KEY = require("../../env-local.js");
+// import { API_KEY } from "../../archive/env-local";
+// const API_KEY = require("../../archive/env-local");
 
 // Assigns Constants to hold User Input Location values until added to permanent Array (Local Storage)
 const inputCity = document.getElementById("city");
@@ -32,7 +32,7 @@ function cityLoc() {
 
   // Assigns User-selected City Location >>
   //
-  // Test Code used to validate functionality without the need to continually input City location data - NO LONGER USED
+  // Note to Reviewers: Test Code used to validate functionality without the need to continually input City location data - NO LONGER USED
   // let inputCity = "Des Moines";
   // let inputState = "MA";
 
@@ -42,14 +42,14 @@ function cityLoc() {
   newSearch.cityLoc = inputCity.value;
   // console.log(`The new City entered is, ${newSearch.cityLoc}`);
 
-  // State is NOT required by OpenWeather API - NOT USED
+  // Note to Reviewers: State is NOT required by OpenWeather API - NOT USED
   // newSearch.stateLoc = inputState.value;
   // console.log(newSearch.stateLoc);
 
   newSearch.cntryLoc = inputCntryCode;
   // console.log(`The Country Code is, ${newSearch.cntryLoc}`);
 
-  // State is NOT required by OpenWeather API - inputLoc with State superseded by code without that parameter
+  // Note to Reviewers: State is NOT required by OpenWeather API - inputLoc with State superseded by code without that parameter
   // inputLoc = inputCity + "," + inputState + "," + inputCntryCode;
 
   // Defines concatenated Location variable (City + State) to be passed to OpenWeather API
@@ -91,10 +91,12 @@ async function getWeather() {
   const apiKey = "91512c0479417b46b9d5f9b5e91a4f51";
   // console.log(apiKey);
 
+  // Note to Reviewers: Current OpenWeather API accepts City and Country Code; Latitude and Longitude are NOT required to successfully call City-based search
   // Assigns OpenWeather Query URL variable, including User-selected Location and API Key
   // Note: Current (within three (3) hour refresh window) Weather, Imperial Units (e.g., Farenheit Temperature) (weather?) - NOT USED
   // const weatherURL = `https://api.openweathermap.org/data/2.5/weather?q=${inputLoc}&appid=${apiKey}&units=imperial`;
 
+  // Note to Reviewers: Current OpenWeather API accepts City and Country Code; Latitude and Longitude are NOT required to successfully call City-based search
   // Note: Five (5) Day Weather (Three (3) Hour Steps), Imperial Units (e.g., Farenheit Temperature) (forecast?)
   const weatherURL = `https://api.openweathermap.org/data/2.5/forecast?q=${inputLoc}&appid=${apiKey}&units=imperial`;
   // console.log(queryURL);
@@ -118,9 +120,9 @@ function displayWeather(data) {
 
   // Displays Current City * Search Date * Weather Icon in HTML >>
   //
-  // Formats Search Date (Unix Timestamp)
+  // Formats Search (Current) Date (Unix Timestamp)
   const searchDate = new Date(data.list[0].dt * 1000);
-  // console.log(searchDate.toDateString());
+  console.log(searchDate.toDateString());
 
   // Clears Display of prior Weather Data
   function clearDisplay() {
@@ -356,7 +358,7 @@ $(document).ready(function () {
   displaySearchHistory();
 });
 
-// Test Code used to validate API return functionality without the need to render data to Display - NO LONGER USED
+// Note to Reviewers: Test Code used to validate API return functionality without the need to render data to Display - NO LONGER USED
 // Outputs OpenWeather 'data' to Console
 function consoleWeather(data) {
   // Disaggregates API Array

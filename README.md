@@ -13,6 +13,7 @@
 - [Contributing](#contributing)
 - [License](#license)
 - [Tests](#tests)
+- [GitHub Repository Location (HTTPS)](#github-repository-location-https)
 - [GitHub Pages Location](#github-pages-location)
 - [Application Screenshots](#application-screenshots) 
 
@@ -100,9 +101,16 @@ N / A
 
 ## Tests
 
+API parameter testing and data evaluation, see test.js (Archive)
+
 JavaScript-created Dashboard presentation of Weather serach entries as &lt;ul&gt; to confirm searchHistory (Array) update.
 
 `console.log` output of OpenWeather API data specific to called locations and Search history data on Search requests; see script.js.
+
+
+## GitHub Repository Location (HTTPS)
+
+https://github.com/MeanderingBrook/06_Challenge_Weather-Dashboard.git
 
 
 ## GitHub Pages Location
